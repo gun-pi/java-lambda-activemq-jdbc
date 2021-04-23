@@ -1,0 +1,49 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+    implementation 'com.amazonaws:aws-lambda-java-core:1.2.1'
+    implementation "org.apache.activemq:activemq-client:5.15.14"
+    implementation "org.apache.activemq:activemq-pool:5.15.14"
+    implementation group: 'org.glassfish.main.javaee-api', name: 'javax.jms', version: '3.1.2.2'
+
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.19'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+task packageFat(type: Zip) {
+    archiveFileName = "${project.name}-fat.zip"
+    from compileJava
+    from processResources
+    into('lib') {
+        from configurations.runtimeClasspath
+    }
+}
+
+task packageLibs(type: Zip) {
+    archiveFileName = "${project.name}-libs.zip"
+    into('java/lib') {
+        from configurations.runtimeClasspath
+    }
+}
+
+task packageLight(type: Zip) {
+    archiveFileName = "${project.name}.zip"
+    from compileJava
+    from processResources
+}
