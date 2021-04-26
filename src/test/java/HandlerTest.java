@@ -8,6 +8,7 @@ import org.example.untitled.mq.Mq;
 import org.junit.jupiter.api.Test;
 
 import javax.jms.JMSException;
+import java.sql.SQLException;
 
 public class HandlerTest {
     private final DocumentDao documentDao = new DocumentDao();
@@ -30,7 +31,12 @@ public class HandlerTest {
 
         System.out.println(message);
 
-        final Long id = documentDao.save(new DocumentEntity(message));
+        Long id = null;
+        try {
+            id = documentDao.save(new DocumentEntity(message));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         System.out.println(id + ": here I am");
     }
