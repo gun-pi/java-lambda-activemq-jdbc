@@ -11,15 +11,10 @@ import javax.jms.JMSException;
 import java.sql.SQLException;
 
 public class HandlerTest {
-    private final DocumentDao documentDao = new DocumentDao();
-
-    private final ActiveMQConnectionFactory connectionFactory = Mq.createActiveMQConnectionFactory();
-
-    private final PooledConnectionFactory pooledConnectionFactory = Mq.createPooledConnectionFactory(connectionFactory);
 
     @Test
     void test() {
-        String input = "test";
+        /*String input = "test";
         String message = null;
         try {
             Mq.sendMessage(pooledConnectionFactory, input);
@@ -38,6 +33,6 @@ public class HandlerTest {
             e.printStackTrace();
         }
 
-        System.out.println(id + ": here I am");
+        System.out.println(id + ": here I am");*/
     }
 }

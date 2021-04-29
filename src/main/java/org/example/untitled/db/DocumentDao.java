@@ -7,11 +7,8 @@ public class DocumentDao {
 
     private static final String URL =
             "jdbc:postgresql://database-1.cx96u0a6s3vd.eu-central-1.rds.amazonaws.com:5432/postgres";
-
     private static final String USERNAME = "postgres";
-
     private static final String PASSWORD = "exampleexample";
-
     private static final String QUERY =
             "INSERT INTO documents (content, published_on, id) VALUES (?, ?, ?) RETURNING id";
 
@@ -33,7 +30,7 @@ public class DocumentDao {
         }
     }
 
-    public Long save(DocumentEntity documentEntity) throws SQLException {
+    public static Long save(DocumentEntity documentEntity) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(QUERY, Statement.RETURN_GENERATED_KEYS);
         preparedStatement.setString(1, documentEntity.getContent());
         preparedStatement.setTimestamp(2, Timestamp.valueOf(documentEntity.getPublishedOn()));

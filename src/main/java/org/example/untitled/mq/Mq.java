@@ -8,16 +8,27 @@ import javax.jms.*;
 public class Mq {
 
     private static final String WIRE_LEVEL_ENDPOINT
-            = "ssl://b-34aa8105-1d5e-4de9-9a46-86ec214d2d6f-1.mq.eu-central-1.amazonaws.com:61617";
-
+            = "ssl://b-bf697da4-6770-4f18-b4be-f1d6d72be87f-1.mq.eu-central-1.amazonaws.com:61617";
     private static final String ACTIVE_MQ_USERNAME = "activemq";
-
     private static final String ACTIVE_MQ_PASSWORD = "exampleexample";
-
     private static final String QUEUE_NAME = "queue";
 
+    private static final ActiveMQConnectionFactory connectionFactory;
 
-    public static void sendMessage(PooledConnectionFactory pooledConnectionFactory, String message) throws JMSException {
+    private static final PooledConnectionFactory pooledConnectionFactory;
+
+
+    static {
+        connectionFactory = new ActiveMQConnectionFactory(WIRE_LEVEL_ENDPOINT);
+        connectionFactory.setUserName(ACTIVE_MQ_USERNAME);
+        connectionFactory.setPassword(ACTIVE_MQ_PASSWORD);
+
+        pooledConnectionFactory = new PooledConnectionFactory();
+        pooledConnectionFactory.setConnectionFactory(connectionFactory);
+        pooledConnectionFactory.setMaxConnections(10);
+    }
+
+    public static void sendMessage(String message) throws JMSException {
         Connection producerConnection = null;
         Session producerSession = null;
         MessageProducer producer = null;
@@ -40,7 +51,7 @@ public class Mq {
         }
     }
 
-    public static String receiveMessage(ActiveMQConnectionFactory connectionFactory) throws JMSException {
+    public static String receiveMessage() throws JMSException {
         Connection consumerConnection = null;
         Session consumerSession = null;
         MessageConsumer consumer = null;
@@ -61,19 +72,5 @@ public class Mq {
             consumerConnection.close();
         }
         return text;
-    }
-
-    public static PooledConnectionFactory createPooledConnectionFactory(ActiveMQConnectionFactory connectionFactory) {
-        final PooledConnectionFactory pooledConnectionFactory = new PooledConnectionFactory();
-        pooledConnectionFactory.setConnectionFactory(connectionFactory);
-        pooledConnectionFactory.setMaxConnections(10);
-        return pooledConnectionFactory;
-    }
-
-    public static ActiveMQConnectionFactory createActiveMQConnectionFactory() {
-        final ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(WIRE_LEVEL_ENDPOINT);
-        connectionFactory.setUserName(ACTIVE_MQ_USERNAME);
-        connectionFactory.setPassword(ACTIVE_MQ_PASSWORD);
-        return connectionFactory;
     }
 }
