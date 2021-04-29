@@ -30,45 +30,37 @@ public class Mq {
 
     public static void sendMessage(String message) throws JMSException {
         Connection producerConnection = null;
-        Session producerSession = null;
-        MessageProducer producer = null;
         try {
             producerConnection = pooledConnectionFactory.createConnection();
             producerConnection.start();
 
-            producerSession = producerConnection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            Session producerSession = producerConnection.createSession(false, Session.AUTO_ACKNOWLEDGE);
             final Destination producerDestination = producerSession.createQueue(QUEUE_NAME);
 
-            producer = producerSession.createProducer(producerDestination);
+            MessageProducer producer = producerSession.createProducer(producerDestination);
             producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 
             final TextMessage producerMessage = producerSession.createTextMessage(message);
             producer.send(producerMessage);
         } finally {
-            producer.close();
-            producerSession.close();
             producerConnection.close();
         }
     }
 
     public static String receiveMessage() throws JMSException {
         Connection consumerConnection = null;
-        Session consumerSession = null;
-        MessageConsumer consumer = null;
         String text;
         try {
             consumerConnection = connectionFactory.createConnection();
             consumerConnection.start();
 
-            consumerSession = consumerConnection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            Session consumerSession = consumerConnection.createSession(false, Session.AUTO_ACKNOWLEDGE);
             final Destination consumerDestination = consumerSession.createQueue(QUEUE_NAME);
 
-            consumer = consumerSession.createConsumer(consumerDestination);
+            MessageConsumer consumer = consumerSession.createConsumer(consumerDestination);
             final TextMessage consumerMessage = (TextMessage) consumer.receive(1000);
             text = consumerMessage.getText();
         } finally {
-            consumer.close();
-            consumerSession.close();
             consumerConnection.close();
         }
         return text;
