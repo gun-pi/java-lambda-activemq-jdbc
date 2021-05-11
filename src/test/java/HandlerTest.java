@@ -10,7 +10,7 @@ public class HandlerTest {
         Handler handler = new Handler();
         Context context = new TestContext();
         final String id = handler.handleRequest("test", context);
-        Assertions.assertTrue(id.matches("[-+]?\\d+"));
+        Assertions.assertTrue(id.matches("\\d+"));
     }
 }
 
