@@ -24,7 +24,7 @@ Resources:
   libs:
     Type: AWS::Serverless::LayerVersion
     Properties:
-      LayerName: lambda-jdbc-layer
+      LayerName: lambda-layer
       Description: Dependencies for the lambda
       ContentUri: s3://onboarding-lambda-bucket/java-jdbc-libs.zip
       CompatibleRuntimes:
