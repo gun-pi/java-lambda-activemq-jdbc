@@ -5,7 +5,7 @@ Resources:
   function:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://onboarding-lambda-bucket/java-jdbc.zip
+      CodeUri: build/distributions/untitled.zip
       Handler: org.example.untitled.Handler::handleRequest
       Runtime: java11
       Description: Lambda function that communicates with MQ and RDS
@@ -26,6 +26,6 @@ Resources:
     Properties:
       LayerName: lambda-layer
       Description: Dependencies for the lambda
-      ContentUri: s3://onboarding-lambda-bucket/java-jdbc-libs.zip
+      ContentUri: build/distributions/untitled-libs.zip
       CompatibleRuntimes:
         - java11
